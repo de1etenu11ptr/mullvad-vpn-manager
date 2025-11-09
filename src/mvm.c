@@ -1,74 +1,156 @@
-#include <locale.h>
-#include "general/macros.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
+#include "general/globals.h"
 #include "general/helper.h"
+#include "core/key_manager.h"
 #include "ui/logo/logo.h"
-#include "ui/main_win.h"
+#include "ui/main_menu.h"
+#include "ui/side_win_menu.h"
+#include "ui/profile_import_menu.h"
 
-WINDOW *logo_win;
-WINDOW *main_win;
-WINDOW *side_win;
+struct _win_manager *win_manager;
+bool cmd_mode = false;
+bool side_win_exists = false;
+int current_win;
+static int current_menu;
+static int highlighted_choice;
+static int n_choices;
 
-void setup_ncurses();
 void clean_up();
+void main_loop();
+void handle_choice(int choice);
+void print_updated_menu();
+void print_typed_chr(int c);
 
 int main()
 {
+	if (sodium_init() < 0) {
+		printf("Sodium library failed to initialize. It is not safe to use the program currently.");
+		return 0;
+	}
+	win_manager = malloc(sizeof(WINDOW *) * 4 * 2);
 	setup_ncurses();
 	refresh();
+	initialize_globals();
 
-	// ISO/ANSI defined screen size is 80x24 (given as <characters per line>x<lines per window>).
-	{
-		int main_wins_width;
-		if (COLS >= 160) {
-			main_wins_width = COLS/2;
-			side_win = new_win(LINES, main_wins_width, 0, COLS/2);
-		} else {
-			main_wins_width = COLS;
-		}
-		logo_win = new_win(LINES/2, main_wins_width, 0, 0);
-		main_win = new_win(LINES/2, main_wins_width, LINES/2, 0);
-	}
-	add_logo(logo_win);
-	build_main_win(main_win, 0);
-	keypad(main_win, TRUE);
-	refresh();
+	create_wins(win_manager);
+	doupdate();
 
-	getch();
+	add_logo(win_manager->logo_win);
+	keypad(win_manager->main_win, TRUE);
+
+	main_loop();
+
 	clean_up();
 	return 0;
 }
 
-void setup_ncurses()
-{
-	setlocale(LC_ALL, "");
-	initscr();
-	start_color();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
-
-	/*
-	Provided the terminal supports the initc capability
-	Check capability with has_colors() and can_change_color().
-	Define the color using init_color():
-	// Scale the RGB values (max 255) to the ncurses range (max 1000)
-	int r = ; // 1000
-	int g = (236 * 1000) / 255; // ~925
-	int b = (10 * 1000) / 255;  // ~39
-	// Define a new color (e.g., as color index 8, if available)
-	init_color(8, r, g, b);
-	*/
-	if (can_change_color()) {
-		init_color(COLOR_YELLOW, (255 * 1000) / 255, (236 * 1000) / 255, (10 * 1000) / 255);
-		init_color(COLOR_BLUE, (41 * 1000) / 255, (77 * 1000) / 255, (115 * 1000) / 255);
-	}
-	init_pair(1, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(2, COLOR_BLUE, COLOR_BLACK);
-	curs_set(0);
-}
 
 void clean_up()
 {
-	delete_win(logo_win);
+	delete_win(win_manager->logo_win);
+	delete_win(win_manager->main_win);
+	delete_win(win_manager->side_win);
+	delete_win(win_manager->cmd_win);
+	free(win_manager);
 	endwin();
+}
+
+void main_loop()
+{
+	int c;
+	WINDOW *win;
+
+	current_menu = MAIN_MENU;
+	current_win = MAIN_WIN;
+	highlighted_choice = 0;
+	print_updated_menu();
+	doupdate();
+	while (true) {
+		win = get_win(win_manager, current_win);
+		keypad(win, TRUE);
+		c = wgetch(win);
+		print_typed_chr(c);
+		switch (c) {
+		case (int) 'k':
+		case KEY_UP:
+			if (highlighted_choice <= 0)
+				highlighted_choice = n_choices - 1;
+			else
+				highlighted_choice--;
+			break;
+		case (int) 'j':
+		case KEY_DOWN:
+			if (highlighted_choice >= n_choices - 1)
+				highlighted_choice = 0;
+			else
+				highlighted_choice++;
+			break;
+		case 10: // Enter key.
+			handle_choice(highlighted_choice);
+			break;
+		case 9: // Tab key.
+			keypad(win, FALSE);
+			if (current_win == MAIN_WIN && side_win_scroller->size > 0) {
+				current_win = SIDE_WIN;
+				highlighted_choice = side_win_scroller->highlighted;
+			} else {
+				current_win = MAIN_WIN;
+				highlighted_choice = 0;
+			}
+			break;
+		case (int) 'q':
+			goto end;
+		}
+		print_updated_menu();
+		doupdate();
+	}
+	end:
+	return;
+}
+
+void handle_choice(int choice)
+{
+	if (current_win == SIDE_WIN)
+		return;
+	switch (current_menu) {
+	case MAIN_MENU:
+		current_menu = handle_main_menu_choice(choice);
+		highlighted_choice = 0;
+		break;
+	case PROFILE_IMPORT_MENU:
+		current_menu = PROFILE_IMPORT_MENU;
+		highlighted_choice = 0;
+		break;
+	}
+}
+
+void print_updated_menu()
+{
+	WINDOW *win = get_win(win_manager, current_win);
+	reset(win);
+	if (current_win == SIDE_WIN) {
+		print_side_win_menu(win, highlighted_choice);
+		n_choices = side_win_scroller->size;
+		return;
+	}
+	switch (current_menu) {
+	case MAIN_MENU:
+		print_main_menu(win, highlighted_choice);
+		n_choices = get_n_main_menu_choices();
+		break;
+	case PROFILE_IMPORT_MENU:
+		print_profile_import_menu(win_manager);
+		current_menu = MAIN_MENU;
+		break;
+	}
+}
+
+void print_typed_chr(int c)
+{
+	wmove(win_manager->cmd_win, 1, 0);
+	wclrtoeol(win_manager->cmd_win);
+	mvwprintw(win_manager->cmd_win, 1, 2, "%d", c);
+	wnoutrefresh(win_manager->cmd_win);
 }

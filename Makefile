@@ -1,7 +1,15 @@
 CXX				= gcc
-CXXFLAGS			= -Wall -D_XOPEN_SOURCE=700 -Wextra -Werror -std=c11 -MMD -MT
+CXXFLAGS			= -Wno-unused-but-set-variable \
+					-Wno-unused-parameter \
+					-Wall \
+					-Wextra \
+					-Werror \
+					-D_XOPEN_SOURCE=700 \
+					-std=c11 \
+					-MMD \
+					-MT
 
-LDFLAGS				= -lncursesw
+LDFLAGS				= -lncursesw -lsodium
 
 SRCDIR				= src
 OBJDIR				= obj

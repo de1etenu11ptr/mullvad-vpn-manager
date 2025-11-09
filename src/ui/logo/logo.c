@@ -1,12 +1,13 @@
 #include "logo.h"
+#include "../../general/globals.h"
 
 void add_shading(WINDOW *win, int max_win_row, int row, int col)
 {
 	for (int i = 1; i < 4; i++) {
 		if (row <= max_win_row - i && col - i >= 0) {
-			if (mvwinch(win, row, col - i) == (unsigned int)*(FULLBLOCK))
+			if (mvwinch(win, row, col - i) == (unsigned int)*(FULL_BLOCK))
 				continue;
-			mvwaddwstr(win, row, col - i, VERTBAR);
+			mvwaddwstr(win, row, col - i, VERT_BARS);
 		}
 	}
 }
@@ -14,6 +15,7 @@ void add_shading(WINDOW *win, int max_win_row, int row, int col)
 void add_logo(WINDOW *win)
 {
 	int attr;
+	int row;
 	int start_row;
 	int start_col;
 	int end_row;
@@ -33,45 +35,48 @@ void add_logo(WINDOW *win)
 	end_row = start_row + logo_height;
 	end_col = start_col + logo_width;
 
-	mvwprintw(win, max_win_row - 2, 2, "%dx%d", max_win_col, max_win_row);
+	mvwprintw(win, max_win_row - 2, 2, "%dx%d", COLS, LINES);
 	if (max_win_col > 60) {
-		attr = A_UNDERLINE | COLOR_PAIR(1);
+		attr = A_UNDERLINE | COLOR_PAIR(PAIR_YELLOW);
 		wattron(win, attr);
-		mvwprintw(win, start_row + logo_height/2 - 1, start_col + (logo_width - 3)/2, "MVM");
+		mvwprintw(win,
+			start_row + logo_height/2 - 1,
+			start_col + (logo_width - 3)/2,
+			"MVM");
 		wattroff(win, attr);
 	}
+	row = start_row;
+	for (; row < start_row + logo_height; row++) {
+		wattron(win, COLOR_PAIR(PAIR_YELLOW));
+		mvwaddwstr(win, row, start_col, FULL_BLOCK);
+		mvwaddwstr(win, row, start_col + 1, FULL_BLOCK);
 
-	for (int row = start_row; row < start_row + logo_height; row++) {
-		wattron(win, COLOR_PAIR(1));
-		mvwaddwstr(win, row, start_col, FULLBLOCK);
-		mvwaddwstr(win, row, start_col + 1, FULLBLOCK);
+		mvwaddwstr(win, row, end_col, FULL_BLOCK);
+		mvwaddwstr(win, row, end_col + 1, FULL_BLOCK);
+		wattroff(win, COLOR_PAIR(PAIR_YELLOW));
 
-		mvwaddwstr(win, row, end_col, FULLBLOCK);
-		mvwaddwstr(win, row, end_col + 1, FULLBLOCK);
-		wattroff(win, COLOR_PAIR(1));
-
-		wattron(win, COLOR_PAIR(2));
+		wattron(win, COLOR_PAIR(PAIR_BLUE));
 		add_shading(win, end_row, row, start_col);
 		add_shading(win, end_row, row, end_col);
-		wattroff(win, COLOR_PAIR(2));
+		wattroff(win, COLOR_PAIR(PAIR_BLUE));
 	}
-	for (int row = start_row + logo_height/2; row < start_row + logo_height; row++) {
+	row = start_row + logo_height/2;
+	for (; row < start_row + logo_height; row++) {
 		int val = (row - (start_row + logo_height/2) + 1);
-		wattron(win, COLOR_PAIR(1));
-		mvwaddwstr(win, row, start_col + val, FULLBLOCK);
-		mvwaddwstr(win, row, start_col + 1 + val, FULLBLOCK);
+		wattron(win, COLOR_PAIR(PAIR_YELLOW));
+		mvwaddwstr(win, row, start_col + val, FULL_BLOCK);
+		mvwaddwstr(win, row, start_col + 1 + val, FULL_BLOCK);
 
-		mvwaddwstr(win, row, end_col - val, FULLBLOCK);
-		mvwaddwstr(win, row, end_col + 1 - val, FULLBLOCK);
-		wattroff(win, COLOR_PAIR(1));
+		mvwaddwstr(win, row, end_col - val, FULL_BLOCK);
+		mvwaddwstr(win, row, end_col + 1 - val, FULL_BLOCK);
+		wattroff(win, COLOR_PAIR(PAIR_YELLOW));
 
-		wattron(win, COLOR_PAIR(2));
+		wattron(win, COLOR_PAIR(PAIR_BLUE));
 		add_shading(win, end_row, row, start_col + val);
 		add_shading(win, end_row, row, end_col - val);
-		wattroff(win, COLOR_PAIR(2));
+		wattroff(win, COLOR_PAIR(PAIR_BLUE));
 	}
 
-	box(win, 0, 0);
-	wrefresh(win);
+	wnoutrefresh(win);
 }
 
