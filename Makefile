@@ -1,7 +1,8 @@
+BUILD				?= release
 CXX				= gcc
-CXXFLAGS			= -Wno-unused-but-set-variable \
-					-Wno-unused-parameter \
-					-Wall \
+CXXFLAGS			= -Wall \
+					-Wno-pointer-sign \
+					-Wno-unused-but-set-parameter \
 					-Wextra \
 					-Werror \
 					-D_XOPEN_SOURCE=700 \
@@ -22,6 +23,23 @@ DEPENDENCIES			= $(OBJECTS:.o=.d)
 
 TARGET				= mvm
 
+ifeq ($(BUILD),debug)
+	CXXFLAGS		+= -g \
+					-Wno-unused-label \
+					-Wno-unused-parameter \
+					-Wno-unused-variable \
+					-Wno-unused-but-set-variable
+	LDFLAGS			+= -g
+else ifeq ($(BUILD),test)
+	CXXFLAGS		+= -O0 \
+					-Wno-unused-label \
+					-Wno-unused-parameter \
+					-Wno-unused-variable \
+					-Wno-unused-but-set-variable
+else ifeq ($(BUILD),release)
+	CXXFLAGS		+= -O2
+endif
+
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
@@ -35,3 +53,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 clean:
 	rm -rf $(OBJDIR) $(TARGET)
+
