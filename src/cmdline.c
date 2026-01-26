@@ -8,6 +8,7 @@
 #include "helpers.h"
 #include "window_helpers.h"
 
+int cmd_win_cooldown = 0;
 
 int cmdline_quick_move() {
 	return SUCCESS;

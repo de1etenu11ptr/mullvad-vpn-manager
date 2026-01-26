@@ -40,6 +40,10 @@ int handle_main_menu_choice()
 		exit_program(EXIT_PROGRAM);
 		break;
 	default:
+		cmd_win_print(false, A_BLINK | SAFE_COLOR_PAIR(PAIR_ERROR),
+			"Option not implemented yet.",
+			NULL);
+		cmd_win_cooldown = 1;
 		return MAIN_MENU;
 	}
 	return MAIN_MENU;

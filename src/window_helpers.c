@@ -27,6 +27,7 @@ int print_updated_wins()
 		current_win = MAIN_WIN;
 		break;
 	}
+	if (cmd_win_cooldown > 0) cmd_win_cooldown--;
 	return SUCCESS;
 }
 
@@ -256,6 +257,7 @@ void highlight_win_border(struct _bordered_win *bwin)
 
 void cmd_win_print(bool update, int attr, const char *fmt, ...)
 {
+	if (cmd_win_cooldown > 0) return;
 	WINDOW *win = win_manager->cmd_win->inner;
 	int maxx = getmaxx(win);
 	char *buffer = malloc(sizeof(char) * maxx);

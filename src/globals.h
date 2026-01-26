@@ -65,6 +65,7 @@ extern struct _win_manager *win_manager;
 #define ON 1
 #define OFF 0
 extern int cmd_mode;
+extern int cmd_win_cooldown;
 
 #define MOVEMENT 0
 #define TEXT 1
