@@ -279,16 +279,16 @@ int get_master_key(char **master_key, int len, int iter)
 	int key_len = -1;
 	WINDOW *win = win_manager->main_win->inner;
 	werase(win);
-	mvwprintw(win, getcury(win), 2,
+	mvwprintw(win, getcury(win), 1,
 		"Please enter the master key for the selected profile: \"%s\"",
 		profile->device_name);
 	wattron(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_BLUE));
-	mvwprintw(win, getcury(win) + 1, 2,
+	mvwprintw(win, getcury(win) + 1, 1,
 		"(The length of the master key must be %s and less than %d)",
 		"greater than or equals to 3",
 		len);
 	wattroff(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_BLUE));
-	wmove(win, getcury(win) + 1, 2);
+	wmove(win, getcury(win) + 1, 1);
 
 	echo();
 	wgetnstr(win, *master_key, len);

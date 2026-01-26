@@ -14,12 +14,13 @@ void profile_import()
 	WINDOW *win = win_manager->main_win->inner;
 	char directory[DIRECTORY_LIMIT];
 	memset(directory, '\0', DIRECTORY_LIMIT);
+	int col = 1;
 
 	wclear(win);
 	wmove(win, 0, 0);
-	mvwprintw(win, getcury(win), 2,
+	mvwprintw(win, getcury(win), col,
 		"Please enter the full path name to the folder containing the Mullvad WireGuard Configuration files:");
-	wmove(win, getcury(win) + 1, 2);
+	wmove(win, getcury(win) + 1, col);
 
 	echo();
 	wgetnstr(win, directory, DIRECTORY_LIMIT);
@@ -42,7 +43,7 @@ void profile_import()
 	}
 
 	wattron(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_YELLOW_BLUE));
-	mvwprintw(win, getcury(win), 2, "Click any character to continue.");
+	mvwprintw(win, getcury(win), col, "Click any character to continue.");
 	wmove(win, getcury(win) + 1, 0);
 	wattroff(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_YELLOW_BLUE));
 	print_win(SIDE_WIN);

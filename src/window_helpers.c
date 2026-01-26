@@ -118,6 +118,7 @@ void print_new_win(int win_n)
 		free(entry);
 	}
 	wnoutrefresh(win);
+	scroller->size = max_entries;
 	if (win_n == SIDE_WIN)
 		create_header();
 	cmd_win_print(false, 0, "%d (%d)",

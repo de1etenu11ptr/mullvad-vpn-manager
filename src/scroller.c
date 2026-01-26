@@ -40,7 +40,7 @@ void scroll_up(int win_n)
 	WINDOW *win = get_win(win_n);
 	struct _win_scroller *scroller = get_win_scroller(win_n);
 	int max_entries = get_max_entries(win_n);
-	if (scroller->top < scroller->highlighted) {
+	if (scroller->top <= scroller->highlighted) {
 		scroll_one(win_n);
 	} else {
 		if (scroller->top > 0) {
@@ -60,14 +60,14 @@ void scroll_down(int win_n)
 	WINDOW *win = get_win(win_n);
 	struct _win_scroller *scroller = get_win_scroller(win_n);
 	int max_entries = get_max_entries(win_n);
-	if (scroller->top + getmaxy(win) - 1 > scroller->highlighted) {
+	if (scroller->highlighted - scroller->top < getmaxy(win)) {
 		scroll_one(win_n);
 	} else {
-		if (scroller->highlighted - scroller->top <= getmaxy(win)) {
+		if (scroller->top < getmaxy(win) - 1) {
 			scroller->top += 1;
 		} else {
 			scroller->top = 0;
-			scroller->prev_highlighted = scroller->highlighted;
+			scroller->prev_highlighted = 0;
 			scroller->highlighted = 0;
 		}
 		print_new_win(win_n);

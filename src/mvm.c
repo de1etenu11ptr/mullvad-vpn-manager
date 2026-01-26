@@ -170,7 +170,6 @@ int main_loop()
 		win = get_win(current_win);
 		keypad(win, TRUE);
 		int ret = cgetch(win, true);
-		struct _win_scroller *scroller = get_win_scroller(current_win);
 		error_check(ret);
 		if (ret == KEY_RESIZE)
 			return KEY_RESIZE;
