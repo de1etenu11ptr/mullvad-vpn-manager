@@ -55,9 +55,9 @@ int print_win(int win_n)
 	}
 	int diff = scroller->prev_highlighted - scroller->highlighted;
 	if (diff == 1) {
-		scroll_down(win_n);
-	} else if (diff == -1) {
 		scroll_up(win_n);
+	} else if (diff == -1) {
+		scroll_down(win_n);
 	} else if (diff != 0) {
 		if (scroller->highlighted == 0) {
 			scroller->top = 0;

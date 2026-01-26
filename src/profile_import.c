@@ -33,10 +33,10 @@ void profile_import()
 		cmd_win_print(false, SAFE_COLOR_PAIR(PAIR_ERROR),
 			"The folder is too deeply nested. Please consider moving it to a more easily accessible location.",
 			NULL);
-		file_log("[ERROR] - The folder provided to import from is too deeply nested.",
+		file_log("ERROR", "The folder provided to import from is too deeply nested.",
 			NULL);
 	} else {
-		file_log("[IMPORT] - Importing profile configurations from the directory \"%s\"",
+		file_log("IMPORT", "Importing profile configurations from the directory \"%s\"",
 			directory,
 			NULL);
 		open_directory(directory);
@@ -60,7 +60,7 @@ int open_directory(char *directory)
 			"Failed to open directory. Please ensure you gave the correct path. (\"%s\")",
 			directory,
 			NULL);
-		file_log("[ERROR] - Failed to open directory given to import. (\"%s\")",
+		file_log("ERROR", "Failed to open directory given to import. (\"%s\")",
 			directory,
 			NULL);
 		return PROFILE_IMPORT_FOLDER_ERROR;
@@ -89,12 +89,12 @@ int open_directory(char *directory)
 	side_win_scroller->top = 0;
 	side_win_scroller->highlighted = 0;
 	if (encrypt_profile() == SUCCESS) {
-		file_log("[IMPORT] - Imported profile: \"%s\"",
+		file_log("IMPORT", "Imported profile: \"%s\"",
 			profile->device_name,
 			NULL);
 	} else {
 		clear_side_win_entries();
-		file_log("[IMPORT] - Failed to import profile: \"%s\"",
+		file_log("IMPORT", "Failed to import profile: \"%s\"",
 			profile->device_name,
 			NULL);
 	}
@@ -121,7 +121,7 @@ int read_profile_config(char *dir, struct dirent *dir_entry)
 			"Failed to read file: \"%s\"",
 			full_path,
 			NULL);
-		file_log("[ERROR] - Failed to read file: \"%s\"", full_path, NULL);
+		file_log("ERROR", "Failed to read file: \"%s\"", full_path, NULL);
 		return FILE_OPEN_ERROR;
 	}
 
@@ -141,7 +141,7 @@ int read_profile_config(char *dir, struct dirent *dir_entry)
 		read_line(file, line, LINE_LIMIT);
 		int ret = handle_line(line, config);
 		if (ret != SUCCESS) {
-			file_log("[ERROR] - Failed to read file likely due to formatting: \"%s\"",
+			file_log("ERROR", "Failed to read file likely due to formatting: \"%s\"",
 				full_path,
 				NULL);
 			return FILE_FORMAT_ERROR;

@@ -63,7 +63,7 @@ void scroll_down(int win_n)
 	if (scroller->highlighted - scroller->top < getmaxy(win)) {
 		scroll_one(win_n);
 	} else {
-		if (scroller->top < getmaxy(win) - 1) {
+		if (scroller->top < max_entries - 1) {
 			scroller->top += 1;
 		} else {
 			scroller->top = 0;

@@ -41,7 +41,7 @@ int handle_movement_key(int direction)
 	if (direction == (int) 'k') {
 		scroller->prev_highlighted = scroller->highlighted;
 		if (scroller->highlighted <= 0)
-			 scroller->highlighted = max_entries - 1;
+			scroller->highlighted = max_entries - 1;
 		else
 			scroller->highlighted--;
 	} else if (direction == (int) 'j') {
@@ -192,7 +192,7 @@ int main()
 
 	if (sodium_init() < 0) {
 		fprintf(stderr, "\e[0;31mSodium library failed to initialize. It is not safe to use the program currently.\n\e[0m");
-		file_log("[ERROR] - Sodium library failed to initialize. It is not safe to use the program currently.", NULL);
+		file_log("ERROR", "Sodium library failed to initialize. It is not safe to use the program currently.", NULL);
 		return 0;
 	}
 
@@ -204,7 +204,7 @@ int main()
 		small_start_up();
 		resizes++;
 		if (resizes > 10) {
-			file_log("I'm tired boss...", NULL);
+			file_log("TROLL", "I'm tired boss...", NULL);
 			resizes = 0;
 		}
 	}

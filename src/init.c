@@ -122,16 +122,16 @@ void setup_ncurses()
 	noecho();
 
 	if (has_colors() != TRUE) {
-		file_log("[START UP] - %s",
+		file_log("START UP", "%s",
 			"Terminal does not support colors.",
 			NULL);
 	} else {
-		file_log("[START UP] - %s",
+		file_log("START UP", "%s",
 			"Terminal supports colors.",
 			NULL);
 		start_color();
 		if (can_change_color()) {
-			file_log("[START UP] - %s",
+			file_log("START UP", "%s",
 				"Setting default color options to preferred RGB values.",
 				NULL);
 			init_color(COLOR_YELLOW,
@@ -143,7 +143,7 @@ void setup_ncurses()
 				(77 * 1000) / 255,
 				(115 * 1000) / 255);
 		}
-		file_log("[START UP] - %s",
+		file_log("START UP", "%s",
 			"Setting up color pairs for the program.",
 			NULL);
 		init_pair(PAIR_ERROR, COLOR_RED, COLOR_BLACK);
@@ -156,7 +156,7 @@ void setup_ncurses()
 
 void sensitive_clean_up()
 {
-	file_log("[EXIT] - Cleaning up sensitive data.", NULL);
+	file_log("EXIT", "Cleaning up sensitive data.", NULL);
 	clear_profile();
 	free(profile);
 	profile = NULL;
@@ -164,7 +164,7 @@ void sensitive_clean_up()
 
 void clean_up_tui()
 {
-	file_log("[EXIT] - Cleaning up TUI.", NULL);
+	file_log("EXIT", "Cleaning up TUI.", NULL);
 	clear_side_win_entries();
 	clear_main_win_entries();
 
@@ -188,14 +188,14 @@ void clean_up()
 	if (PROFILE_FILE_KEYS != NULL)
 		fclose(PROFILE_FILE_KEYS);
 	free(MVM_LOG_PATH);
-	file_log("[EXIT] - PROGRAM CLOSING...", NULL);
+	file_log("EXIT", "PROGRAM CLOSING...", NULL);
 	if (LOG != NULL)
 		fclose(LOG);
 }
 
 void start_up_tui()
 {
-	file_log("[START UP] - %s",
+	file_log("START UP", "%s",
 		"Setting up TUI.",
 		NULL);
 	setup_ncurses();
@@ -215,7 +215,7 @@ void start_up_tui()
 
 void start_up()
 {
-	file_log("[START UP] - %s",
+	file_log("START UP", "%s",
 		"PROGRAM STARTING...",
 		NULL);
 	start_up_tui();

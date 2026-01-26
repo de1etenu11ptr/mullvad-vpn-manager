@@ -98,7 +98,7 @@ int get_side_win_entry(char **entry, int index)
 		return NO_WIN_ENTRY_FOUND;
 	*entry = malloc(COLS + 1);
 	if (!(*entry)) {
-		file_log("[ERROR] - Malloc for copying side window entry failed.", NULL);
+		file_log("ERROR", "Malloc for copying side window entry failed.", NULL);
 		return MALLOC_FAILED;
 	}
 	int tracker = 0;

@@ -28,7 +28,7 @@ int get_main_win_entry(char **entry, int index)
 	int len = strlen(main_win_entries[index]);
 	*entry = malloc(len + 1);
 	if (!(*entry)) {
-		file_log("[ERROR] - Malloc for copying main window entry failed.", NULL);
+		file_log("ERROR", "Malloc for copying main window entry failed.", NULL);
 		return MALLOC_FAILED;
 	}
 	memcpy(*entry, main_win_entries[index], len + 1);
@@ -38,7 +38,7 @@ int get_main_win_entry(char **entry, int index)
 void add_main_win_entry(char *entry)
 {
 	if (get_max_entries(MAIN_WIN) >= 1000) {
-		file_log("[ERROR] - Failed to add main window entry \"%s\" (too many entries)",
+		file_log("ERROR", "Failed to add main window entry \"%s\" (too many entries)",
 			entry,
 			NULL);
 		return;
@@ -46,7 +46,7 @@ void add_main_win_entry(char *entry)
 	int len = strlen(entry);
 	main_win_entries[n_main_win_entries] = malloc(len + 1);
 	if (!main_win_entries[n_main_win_entries]) {
-		file_log("[ERROR] - Failed to add main window entry \"%s\" (at the malloc stage)",
+		file_log("ERROR", "Failed to add main window entry \"%s\" (at the malloc stage)",
 			entry,
 			NULL);
 		exit_program(MALLOC_FAILED);

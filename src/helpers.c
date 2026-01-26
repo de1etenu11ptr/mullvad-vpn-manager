@@ -32,7 +32,7 @@ int concatstrs(char *buffer, int buffer_size, ...)
 	return SUCCESS;
 }
 
-void file_log(const char *fmt, ...)
+void file_log(const char *type, const char *fmt, ...)
 {
 	if (LOG == NULL)
 		return;
@@ -45,7 +45,7 @@ void file_log(const char *fmt, ...)
 	strftime(time_str, sizeof(time_str),
 		"%Y-%m-%d %H:%M:%S",
 		t);
-	fprintf(LOG, "[%s] - ", time_str);
+	fprintf(LOG, "[%s] - [%s] - ", time_str, type);
 
 	vfprintf(LOG, fmt, args);
 	fputc('\n', LOG);

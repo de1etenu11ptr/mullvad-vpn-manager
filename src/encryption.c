@@ -31,13 +31,13 @@ int encrypt_profile()
 	PROFILE_FILE_KEYS = fopen(profile_keys_filename, "wb");
 
 	if (PROFILE_FILE == NULL || PROFILE_FILE_KEYS == NULL) {
-		file_log("[ERROR] - Failed to create profile file (and/or key file) for: \"%s\"",
+		file_log("ERROR", "Failed to create profile file (and/or key file) for: \"%s\"",
 			profile->device_name,
 			NULL);
 		return FILE_OPEN_ERROR;
 	}
 
-	file_log("[ENCRYPTION] - Encrypting profile: \"%s\"",
+	file_log("ENCRYPTION", "Encrypting profile: \"%s\"",
 		profile->device_name,
 		NULL);
 
@@ -61,7 +61,7 @@ int encrypt_profile()
 	enc_data_len = encrypt_data(&enc_data, data_key, nonces[0]);
 	if (enc_data_len == (unsigned long long) -1) {
 		ret = PROFILE_ENCRYPTION_FAILED;
-		file_log("[ERROR] - Failed to encrypt data for: \"%s\"",
+		file_log("ERROR", "Failed to encrypt data for: \"%s\"",
 			profile->device_name,
 			NULL);
 		goto end;
@@ -69,7 +69,7 @@ int encrypt_profile()
 	enc_data_key_len = encrypt_data_key(&enc_data_key, data_key, nonces[1]);
 	if (enc_data_key_len == (unsigned long long) -1) {
 		ret = PROFILE_ENCRYPTION_FAILED;
-		file_log("[ERROR] - Failed to encrypt data key for: \"%s\"",
+		file_log("ERROR", "Failed to encrypt data key for: \"%s\"",
 			profile->device_name,
 			NULL);
 		goto end;
@@ -81,7 +81,7 @@ int encrypt_profile()
 
 	fwrite(enc_data, 1, enc_data_len, PROFILE_FILE);
 	fwrite(profile_keys_data, 1, profile_keys_data_len, PROFILE_FILE_KEYS);
-	file_log("[ENCRYPTION] - Encrypted profile: \"%s\"",
+	file_log("ENCRYPTION", "Encrypted profile: \"%s\"",
 		profile->device_name,
 		NULL);
 
@@ -207,7 +207,7 @@ unsigned long long serialize_profile(char **data)
 		if (written < 0) {
 			free(configs);
 			configs = NULL;
-			file_log("[ERROR] - Failed to serialize profile.", NULL);
+			file_log("ERROR", "Failed to serialize profile.", NULL);
 			return (unsigned long long) -1;
 		}
 		tracker += written;
