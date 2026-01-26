@@ -31,7 +31,7 @@ void profile_import()
 		directory[DIRECTORY_LIMIT - 1] != '\r' &&
 		directory[DIRECTORY_LIMIT - 1] != EOF) {
 		cmd_win_print(false, SAFE_COLOR_PAIR(PAIR_ERROR),
-			"The folder is too deeply nested. Please consider moving it to a more easily accessible location.",
+			"The folder is too deeply nested (or the name is simply too long. Please consider moving it to a more easily accessible location.",
 			NULL);
 		file_log("ERROR", "The folder provided to import from is too deeply nested.",
 			NULL);

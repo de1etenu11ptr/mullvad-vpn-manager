@@ -38,6 +38,7 @@ int handle_movement_key(int direction)
 {
 	struct _win_scroller *scroller = get_win_scroller(current_win);
 	int max_entries = get_max_entries(current_win);
+	if (max_entries <= 1) return SUCCESS;
 	if (direction == (int) 'k') {
 		scroller->prev_highlighted = scroller->highlighted;
 		if (scroller->highlighted <= 0)
@@ -66,6 +67,14 @@ int handle_choice()
 		ret = handle_main_menu_choice();
 		scroller->prev_highlighted = scroller->highlighted;
 		scroller->highlighted = 0;
+		break;
+	case PROFILES_LIST_MENU:
+		current_menu = MAIN_MENU;
+		print_main_menu();
+		print_new_win(MAIN_WIN);
+		wnoutrefresh(get_win(MAIN_WIN));
+		doupdate();
+		break;
 	}
 	return SUCCESS;
 }

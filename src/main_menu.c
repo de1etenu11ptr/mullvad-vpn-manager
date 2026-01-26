@@ -25,10 +25,14 @@ int handle_main_menu_choice()
 	WINDOW *win = get_win(current_win);
 	switch (scroller->highlighted) {
 	case 0:
-		profiles_list();
+		int ret = profiles_list();
 		wgetch(win);
 		print_new_win(current_win);
 		doupdate();
+		if (ret == SUCCESS) {
+			current_menu = PROFILES_LIST_MENU;
+			return PROFILES_LIST_MENU;
+		}
 		return MAIN_MENU;
 	case 1:
 		profile_import();
