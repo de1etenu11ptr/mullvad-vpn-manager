@@ -135,7 +135,7 @@ int read_profile_config(char *dir, struct dirent *dir_entry)
 	filename[len] = '\0';
 
 	struct _profile_config *config = profile->configs[profile->n_configs];
-	strncpy(config->server_code, filename, len);
+	strncpy(config->server_code, filename, len + 1);
 	while (!feof(file)) {
 		memset(line, '\0', LINE_LIMIT);
 		read_line(file, line, LINE_LIMIT);
@@ -197,7 +197,9 @@ int handle_line(char *line, struct _profile_config *config)
 	{
 		tmp = create_array_from_str(tmpline, ',', 2, len);
 		strncpy(config->ipv4_address, tmp[0], IPV4_ADDRESS_SIZE);
+		config->ipv4_address[IPV4_ADDRESS_SIZE - 1] = '\0';
 		strncpy(config->ipv6_address, tmp[1], IPV6_ADDRESS_SIZE);
+		config->ipv6_address[IPV6_ADDRESS_SIZE - 1] = '\0';
 		clear_sensitive_1d_entries(tmp, 2);
 		free(tmp);
 		tmp = NULL;
@@ -206,18 +208,22 @@ int handle_line(char *line, struct _profile_config *config)
 		(len = strlen((tmpline = line + 6))) < IPV4_ADDRESS_SIZE - 1)
 	{
 		strncpy(config->dns, tmpline, IPV4_ADDRESS_SIZE);
+		config->dns[IPV4_ADDRESS_SIZE - 1] = '\0';
 	} else if (
 		strncmp(line, "PublicKey ", 10) == 0 &&
 		(len = strlen((tmpline = line + 12))) < VPN_KEY_SIZE - 1)
 	{
 		strncpy(config->public_key, tmpline, VPN_KEY_SIZE);
+		config->public_key[VPN_KEY_SIZE - 1] = '\0';
 	} else if (
 		strncmp(line, "AllowedIPs ", 11) == 0 &&
 		(len = strlen((tmpline = line + 13))) < IPV4_ADDRESS_SIZE + IPV6_ADDRESS_SIZE + 1)
 	{
 		tmp = create_array_from_str(tmpline, ',', 2, len);
 		strncpy(config->ipv4_allowed_ips, tmp[0], IPV4_ADDRESS_SIZE);
+		config->ipv4_allowed_ips[IPV4_ADDRESS_SIZE - 1] = '\0';
 		strncpy(config->ipv6_allowed_ips, tmp[1], IPV6_ADDRESS_SIZE);
+		config->ipv6_allowed_ips[IPV6_ADDRESS_SIZE - 1] = '\0';
 		clear_sensitive_1d_entries(tmp, 2);
 		free(tmp);
 		tmp = NULL;
@@ -227,7 +233,9 @@ int handle_line(char *line, struct _profile_config *config)
 	{
 		tmp = create_array_from_str(tmpline, ':', 2, len);
 		strncpy(config->ipv4_endpoint, tmp[0], IPV4_ADDRESS_SIZE);
+		config->ipv4_endpoint[IPV4_ADDRESS_SIZE - 1] = '\0';
 		strncpy(config->port, tmp[1], MAX_PORT_SIZE);
+		config->port[MAX_PORT_SIZE - 1] = '\0';
 		clear_sensitive_1d_entries(tmp, 2);
 		free(tmp);
 		tmp = NULL;
