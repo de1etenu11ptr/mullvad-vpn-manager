@@ -26,9 +26,6 @@ int handle_main_menu_choice()
 	switch (scroller->highlighted) {
 	case 0:
 		int ret = profiles_list();
-		wgetch(win);
-		print_new_win(current_win);
-		doupdate();
 		if (ret == SUCCESS) {
 			current_menu = PROFILES_LIST_MENU;
 			return PROFILES_LIST_MENU;
