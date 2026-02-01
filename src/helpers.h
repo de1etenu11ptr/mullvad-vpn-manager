@@ -19,6 +19,9 @@ void setup_ncurses();
 void reset_win(WINDOW *w);
 
 void file_log(const char *type, const char *fmt, ...);
+void create_str(char **final_str, int count, ...);
+int read_file(char **content, char *file_path);
+FILE *open_file(char *file_path, char *type);
 
 void exit_program(int err);
 

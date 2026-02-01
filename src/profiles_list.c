@@ -1,6 +1,8 @@
+#include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include "globals.h"
+#include "helpers.h"
 #include "profiles_list.h"
 #include "main_win.h"
 #include "main_menu.h"
@@ -60,5 +62,30 @@ int profiles_list()
 	}
 	print_new_win(MAIN_WIN);
 	doupdate();
+	return SUCCESS;
+}
+
+int load_profile(int choice) {
+	char *entry;
+	char *profile_file_path;
+	char *contents;
+	if (get_main_win_entry(&entry, choice) != SUCCESS)
+		return GENERIC_FAIL;
+	file_log("LOG", "Choice (%d): %s", choice, entry, NULL);
+	create_str(&profile_file_path, 7,
+		HOME_DIR,
+		"/",
+		_MVM_PROFILE_CONFIGS_DIR,
+		"/",
+		_MVM_PROFILE_CONFIG_KEYS_PREFIX,
+		entry,
+		_MVM_PROFILE_CONFIG_SUFFIX,
+		NULL);
+	file_log("LOG", "Filename: %s", profile_file_path, NULL);
+	read_file(&contents, profile_file_path);
+	file_log("LOG", "Contents: %s", contents, NULL);
+	free(entry);
+	free(profile_file_path);
+	free(contents);
 	return SUCCESS;
 }

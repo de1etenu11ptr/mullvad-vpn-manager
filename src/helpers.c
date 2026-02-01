@@ -55,6 +55,63 @@ void file_log(const char *type, const char *fmt, ...)
 	va_end(args);
 }
 
+void create_str(char **final_str, int count, ...) {
+	unsigned int final_str_size = 1;
+	va_list args;
+	va_start(args, count);
+
+	for (int i = 0; i < count; i++) {
+		char *str = va_arg(args, char *);
+		final_str_size += strlen(str);
+	}
+
+	*final_str = malloc(final_str_size);
+	memset(*final_str, '\0', final_str_size);
+	va_end(args);
+
+	va_start(args, count);
+
+	for (int i = 0; i < count; i++) {
+		char *str = va_arg(args, char *);
+		strcat(*final_str, str);
+	}
+
+	va_end(args);
+}
+
+FILE *open_file(char *file_path, char *type) {
+	FILE *file = fopen(file_path, type);
+	if (file == NULL) {
+		cmd_win_print(false, SAFE_COLOR_PAIR(PAIR_ERROR),
+			"Failed to read file: \"%s\"",
+			file_path,
+			NULL);
+		file_log("ERROR", "Failed to read file: \"%s\"", file_path, NULL);
+		return NULL;
+	}
+	return file;
+}
+
+int read_file(char **content, char *file_path) {
+	FILE *file;
+	if ((file = open_file(file_path, "r")) == NULL)
+		return FILE_OPEN_ERROR;
+	int size = 0;
+	while (!feof(file)) {
+		size++;
+		fgetc(file);
+	}
+	fseek(file, 0, SEEK_SET);
+	*content = malloc(size + 1);
+	size = 0;
+	while (!feof(file)) {
+		*(*content + size) = fgetc(file);
+		size++;
+	}
+	fclose(file);
+	return SUCCESS;
+}
+
 void exit_program(int err)
 {
 	clean_up();

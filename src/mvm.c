@@ -70,6 +70,7 @@ int handle_choice()
 		break;
 	case PROFILES_LIST_MENU:
 		current_menu = MAIN_MENU;
+		load_profile(scroller->highlighted);
 		print_main_menu();
 		print_new_win(MAIN_WIN);
 		wnoutrefresh(get_win(MAIN_WIN));

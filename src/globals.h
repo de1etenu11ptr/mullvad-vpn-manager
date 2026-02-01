@@ -26,6 +26,7 @@
 #define PAIR_YELLOW_BLUE 103
 
 #define SUCCESS 0
+#define GENERIC_FAIL -2000
 #define EXIT_PROGRAM -1000
 #define WAIT 1000
 
