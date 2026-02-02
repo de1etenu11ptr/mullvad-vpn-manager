@@ -221,20 +221,25 @@ void delete_bordered_win(struct _bordered_win *bw)
 	delete_win(bw->inner);
 	delete_win(bw->border);
 	free(bw);
-	bw = NULL;
 }
 
 void delete_windows()
 {
 	delete_bordered_win(win_manager->logo_win);
+	win_manager->logo_win = NULL;
 
 	delete_bordered_win(win_manager->main_win);
+	win_manager->main_win = NULL;
 
 	delete_bordered_win(win_manager->side_win_body);
+	win_manager->side_win_body = NULL;
 	delete_bordered_win(win_manager->side_win_header);
+	win_manager->side_win_header = NULL;
 	delete_bordered_win(win_manager->side_win);
+	win_manager->side_win = NULL;
 
 	delete_bordered_win(win_manager->cmd_win);
+	win_manager->cmd_win = NULL;
 }
 
 void dim_win_border(struct _bordered_win *bwin)
