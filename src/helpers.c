@@ -12,27 +12,6 @@
 #include "logo.h"
 #include "init.h"
 
-int concatstrs(char *buffer, int buffer_size, ...)
-{
-	memset(buffer, '\0', buffer_size);
-	char *str;
-	int buffer_size_rem = buffer_size;
-	va_list args;
-	va_start(args, buffer_size);
-	while ((str = va_arg(args, char *)) != NULL) {
-		int len = strlen(str);
-		strncat(buffer, str, buffer_size_rem);
-		if (buffer_size_rem == 0 || buffer_size_rem <= len) {
-			buffer[buffer_size - 1] = '\0';
-			return BUFFER_SIZE_ERROR;
-		}
-		buffer_size_rem -= len;
-	}
-	buffer[buffer_size - 1] = '\0';
-	va_end(args);
-	return SUCCESS;
-}
-
 void file_log(const char *type, const char *fmt, ...)
 {
 	if (LOG == NULL)

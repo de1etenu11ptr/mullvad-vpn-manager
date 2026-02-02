@@ -31,8 +31,6 @@ void small_start_up();
 WINDOW *get_win(int bwin);
 struct _bordered_win *get_bwin(int bwin);
 
-int concatstrs(char *buffer, int buffer_size_rem, ...);
-int concatstrswithargs(char *buffer, int buffer_size_rem, va_list args);
 void cmd_win_print(bool update, int attr, const char *fmt, ...);
 int read_line(FILE *stream, char *buffer, int buffer_size);
 
