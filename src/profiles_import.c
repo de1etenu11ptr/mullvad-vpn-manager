@@ -1,7 +1,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <errno.h>
-#include "profile_import.h"
+#include "profiles_import.h"
 #include "helpers.h"
 #include "globals.h"
 #include "profiles.h"
@@ -9,7 +9,7 @@
 #include "window_helpers.h"
 #include "encryption.h"
 
-void profile_import()
+void profiles_import()
 {
 	WINDOW *win = win_manager->main_win->inner;
 	char directory[DIRECTORY_LIMIT];
@@ -43,11 +43,13 @@ void profile_import()
 	}
 
 	wattron(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_YELLOW_BLUE));
+	werase(win);
 	mvwprintw(win, getcury(win), col, "Click any character to continue.");
 	wmove(win, getcury(win) + 1, 0);
 	wattroff(win, A_BLINK | SAFE_COLOR_PAIR(PAIR_YELLOW_BLUE));
 	print_win(SIDE_WIN);
 	doupdate();
+	wgetch(win);
 }
 
 int open_directory(char *directory)

@@ -3,7 +3,7 @@
 #include "encryption.h"
 #include "globals.h"
 #include "helpers.h"
-#include "profile_import.h"
+#include "profiles_import.h"
 
 FILE *PROFILE_FILE;
 FILE *PROFILE_FILE_KEYS;

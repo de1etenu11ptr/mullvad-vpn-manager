@@ -20,6 +20,7 @@ void reset_win(WINDOW *w);
 
 void file_log(const char *type, const char *fmt, ...);
 void create_str(char **final_str, int count, ...);
+int create_str_array(char ***array, char *str, char delim);
 int read_file(char **content, char *file_path);
 FILE *open_file(char *file_path, char *type);
 

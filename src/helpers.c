@@ -59,6 +59,36 @@ void create_str(char **final_str, int count, ...) {
 	va_end(args);
 }
 
+int create_str_array(char ***array, char *str, char delim) {
+	int max_len = 0, no_strs = 1;
+	int full_len = strlen(str);
+	for (int i = 0, tmp = 0; i < full_len; i++) {
+		if (str[i] == delim) {
+			if (tmp > max_len)
+				max_len = tmp;
+			tmp = 0;
+			no_strs++;
+			continue;
+		}
+		tmp++;
+	}
+	*array = malloc(sizeof(char *) * no_strs);
+	for (int i = 0, j = 0; i < no_strs; i++) {
+		(*array)[i] = malloc(sizeof(char) * (max_len + 1));
+		memset((*array)[i], '\0', max_len + 1);
+		while (str[j] != '\0' && str[j] != EOF) {
+			if (str[j] == delim) {
+				str = &(str[j+1]);
+				j = 0;
+				break;
+			}
+			(*array)[i][j] = str[j];
+			j++;
+		}
+	}
+	return no_strs;
+}
+
 FILE *open_file(char *file_path, char *type) {
 	FILE *file = fopen(file_path, type);
 	if (file == NULL) {

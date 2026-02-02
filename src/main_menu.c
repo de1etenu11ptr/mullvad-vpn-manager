@@ -2,7 +2,7 @@
 #include "main_menu.h"
 #include "main_win.h"
 #include "profiles.h"
-#include "profile_import.h"
+#include "profiles_import.h"
 #include "profiles_list.h"
 #include "scroller.h"
 #include "globals.h"
@@ -32,8 +32,7 @@ int handle_main_menu_choice()
 		}
 		return MAIN_MENU;
 	case 1:
-		profile_import();
-		wgetch(win);
+		profiles_import();
 		print_new_win(current_win);
 		doupdate();
 		return MAIN_MENU;

@@ -7,7 +7,7 @@
 #include "encryption.h"
 #include "helpers.h"
 #include "globals.h"
-#include "profile_import.h"
+#include "profiles_import.h"
 #include "side_win.h"
 
 struct _profile *profile;

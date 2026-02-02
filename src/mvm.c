@@ -12,7 +12,7 @@
 #include "logo.h"
 #include "side_win.h"
 #include "scroller.h"
-#include "profile_import.h"
+#include "profiles_import.h"
 #include "profiles_list.h"
 #include "window_helpers.h"
 

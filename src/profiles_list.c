@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include "decryption.h"
 #include "globals.h"
 #include "helpers.h"
 #include "profiles_list.h"
@@ -81,9 +82,10 @@ int load_profile(int choice) {
 		_MVM_PROFILE_CONFIG_SUFFIX,
 		NULL);
 	read_file(&contents, profile_file_path);
-	file_log("LOG", "Contents: %s", contents, NULL);
+	get_profile_configs(contents);
 	free(entry);
 	free(profile_file_path);
+	memset(contents, '\0', strlen(contents));
 	free(contents);
 	return SUCCESS;
 }
