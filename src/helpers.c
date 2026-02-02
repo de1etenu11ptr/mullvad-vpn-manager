@@ -5,6 +5,7 @@
 #include <time.h>
 #include <ncurses.h>
 #include <string.h>
+#include "window_helpers.h"
 #include "helpers.h"
 #include "globals.h"
 #include "profiles.h"
@@ -129,6 +130,9 @@ void small_start_up()
 	create_windows();
 	if (win_manager->logo_win != NULL)
 		add_logo(win_manager->logo_win->inner);
+	if (get_max_entries(SIDE_WIN) > 0)
+		print_new_win(SIDE_WIN);
+	print_new_win(MAIN_WIN);
 	keypad(win_manager->main_win->inner, TRUE);
 	refresh();
 }
