@@ -71,7 +71,6 @@ int load_profile(int choice) {
 	char *contents;
 	if (get_main_win_entry(&entry, choice) != SUCCESS)
 		return GENERIC_FAIL;
-	file_log("LOG", "Choice (%d): %s", choice, entry, NULL);
 	create_str(&profile_file_path, 7,
 		HOME_DIR,
 		"/",
@@ -81,7 +80,6 @@ int load_profile(int choice) {
 		entry,
 		_MVM_PROFILE_CONFIG_SUFFIX,
 		NULL);
-	file_log("LOG", "Filename: %s", profile_file_path, NULL);
 	read_file(&contents, profile_file_path);
 	file_log("LOG", "Contents: %s", contents, NULL);
 	free(entry);
